@@ -29,7 +29,15 @@ const RegistrationForm = () => {
 
   const handleChange = ({ target: { name, value } }) => {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-    setFormData(prev => ({ ...prev, [name]: value, ...(name === 'country' && { city: '' }) }));
+    
+    setFormData(prev => {
+      const newFormData = { ...prev, [name]: value };
+      // Reset city when country changes
+      if (name === 'country') {
+        newFormData.city = '';
+      }
+      return newFormData;
+    });
   };
 
   const validateForm = () => {
@@ -118,7 +126,7 @@ const RegistrationForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="min-h-screen bg-blue-50 py-8 px-4">
+    <div className="min-h-screen bg-blue-50 py-8 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg">
         <div className="bg-blue-600 px-6 py-4 rounded-t-lg">
           <h1 className="text-2xl font-bold text-white">Create Your Account</h1>
@@ -148,7 +156,7 @@ const RegistrationForm = () => {
                   onClick={() => setShowPassword(prev => !prev)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  {showPassword ? 'Dont show' : 'Show'}
+                  {showPassword ? '🙈' : '👁️'}
                 </button>
               </div>
               {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
@@ -221,7 +229,8 @@ const RegistrationForm = () => {
           </div>
           <div className="mt-8 flex gap-4">
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700"
             >
               Create Account
@@ -236,7 +245,7 @@ const RegistrationForm = () => {
           </div>
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 
